@@ -19,57 +19,43 @@ intents = discord.Intents(members = True, messages = True, guilds = True)
 
 client = commands.Bot(intents = intents, command_prefix = "!t ", status=discord.Status.online, activity=discord.Game("under construction"))
 
+bumping = False
+
+lock = asyncio.Lock()
+
 @client.event
 async def on_ready():
     print("Bump Reminder is now running")
-
-# @client.event
-# async def on_message(message):
-#     ch = message.channel
-
-#     if message.author.id == 302050872383242240: # <---- this number is the Disboard user ID
-
-#         await ch.send("bump called")
-#         if message.embeds:
-#             await ch.send("embed")
-
-#             if "done" in message.embeds[0].description:
-#                 await ch.send("bump success, starting timer for 120 minutes")
-#                 await asyncio.sleep(7200)
-#                 await ch.send("Time to bump.")
-#             elif "wait" in message.embeds[0].description:
-#                 desc = message.embeds[0].description
-#                 num = [int(i) for i in desc.split() if i.isdigit()]
-#                 num_conv = str(num[0])
-#                 print(num)
-#                 await ch.send("bump wait " + num_conv + " minutes")
-#                 await asyncio.sleep(num[0] * 60)
-#                 await ch.send("time to bump again!")
-#             else:
-#                 await ch.send("desc uncaught")
-#                 print("nothing found")
-#     await client.process_commands(message)
 
 @client.event
 async def on_message(message):
     ch = message.channel
     time = 0
+    global bumping
+    should_bump = False
 
     if message.author.id == 302050872383242240:
         if message.embeds:
-            await ch.send('embed')
-            if "done" in message.embeds[0].description:
-                time = 120
-            elif "wait" in message.embeds[0].description:
-                desc = message.embeds[0].description
-                time_list = [int(i) for i in desc.split() if i.isdigit()]
-                time = time_list[0]
-                time_conv = str(time_list[0])
-                await ch.send(str(time)+ " asdfasdf") # debug check
-                await ch.send("bump again in+ " + time_conv + " minutes")
-            else:
-                await ch.send("desc uncaught")
-        await asyncio.sleep(time * 60)
-        await ch.send("time to bump! waited " + str(time * 60))
+            await lock.acquire()
+            try:
+                if "done" in message.embeds[0].description:
+                    time = 120
+                elif "wait" in message.embeds[0].description:
+                    desc = message.embeds[0].description
+                    time_list = [int(i) for i in desc.split() if i.isdigit()]
+                    time = time_list[0]
+                    time_conv = str(time_list[0])
+                    await ch.send("bump again in " + time_conv + " minutes")
+                else:
+                    await ch.send("desc uncaught") # debug
+            finally:
+                if bumping == False:
+                    should_bump = True
+                    bumping = True
+                lock.release()
+                if should_bump:
+                    await asyncio.sleep(time * 60) # time shortened for debug
+                    await ch.send("time to bump! waited " + str(time))
+                    bumping = False
 
 client.run(DISCORD_TOKEN)

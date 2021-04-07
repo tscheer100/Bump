@@ -8,3 +8,4 @@ A discord bot created to remind users to bump the server 2 hours after the previ
 
 ### What I've learned from this project
 - the benefits of using `asyncio` over `time.sleep`
+- scratched the surface with `asyncio.lock()`
