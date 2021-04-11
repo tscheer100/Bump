@@ -8,16 +8,13 @@ from dotenv import load_dotenv
 import time
 
 # uncomment the line below if you're trying to edit code in VSCode
-# os.chdir('./Bump')
+os.chdir('./Bump')
 load_dotenv('./.env')
 DISCORD_TOKEN = os.getenv('DISCORD_TOKEN')
 
 intents = discord.Intents(members = True, messages = True, guilds = True)
-
-client = commands.Bot(intents = intents, command_prefix = "!d ", status=discord.Status.online, activity=discord.Game("under construction") )
-
+client = commands.Bot(intents = intents, command_prefix = ".", status=discord.Status.online, activity=discord.Game("under construction") )
 bumping = False
-
 lock = asyncio.Lock()
 
 @client.event
@@ -35,6 +32,16 @@ async def github(ctx):
     embed.add_field(name = "Developers Github", value = "https://github.com/tscheer100")
     embed.add_field(name = "Support more free bots by paying for the developer's coffee :woozy_face::coffee:", value = "https://www.paypal.com/paypalme/TheTurtleKing", inline = False)
     await ctx.send(embed = embed)    
+
+@client.command(aliases = ['discord', 'Discord'])
+async def server(ctx):
+    embed = discord.Embed(
+        title = "Join the devs Discord server!",
+        description = "Gain access [here](https://discord.gg/cjU545W)"
+    )
+    embed.set_thumbnail(url = "https://cdn.discordapp.com/attachments/767175117901266974/767250128045473802/duskiconmixedreborn.gif")
+    embed.set_footer(icon_url = ctx.author.avatar_url, text = f"requested by {ctx.author.name}")
+    await ctx.send(embed = embed)
 
 @client.event
 async def on_message(message):
