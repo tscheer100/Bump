@@ -14,7 +14,7 @@ DISCORD_TOKEN = os.getenv('DISCORD_TOKEN')
 
 intents = discord.Intents(members = True, messages = True, guilds = True)
 
-client = commands.Bot(intents = intents, command_prefix = "!d", status=discord.Status.online, activity=discord.Game("under construction") )
+client = commands.Bot(intents = intents, command_prefix = "!d ", status=discord.Status.online, activity=discord.Game("under construction") )
 
 bumping = False
 
