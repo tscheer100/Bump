@@ -8,7 +8,7 @@ from dotenv import load_dotenv
 import time
 
 # uncomment the line below if you're trying to edit code in VSCode
-os.chdir('./Bump')
+# os.chdir('./Bump')
 load_dotenv('./.env')
 DISCORD_TOKEN = os.getenv('DISCORD_TOKEN')
 
@@ -49,14 +49,13 @@ async def on_message(message):
             await lock.acquire()
             try:
                 if "done" in message.embeds[0].description:
-                    # done statement still needs to be checked.
                     time = 120
                     embed_done = discord.Embed(
                         title = "Bump complete!",
                         color = discord.Colour.purple(),
                         description = "bump again in 2 hours"
                     )
-                    embed_done.set_thumbnail("https://upload.wikimedia.org/wikipedia/commons/7/7a/Alarm_Clock_GIF_Animation_High_Res.gif")
+                    embed_done.set_thumbnail(url = "https://media.giphy.com/media/lTjXSsPmX3Jdx4J7DU/giphy.gif")
                     await ch.send(embed = embed_done)
                 elif "wait" in message.embeds[0].description:
                     desc = message.embeds[0].description
@@ -80,7 +79,12 @@ async def on_message(message):
                 lock.release()
                 if should_bump:
                     await asyncio.sleep(time * 60) # time shortened for debug
-                    await ch.send("time to bump! waited " + str(time))
+                    embed_bump = discord.Embed(
+                        title = "Time to bump!",
+                        color = discord.Colour.purple(),
+                        description = "time to bump! Type `!d bump` to bump the server again",
+                    )
+                    embed_bump.set_footer(url = "https://upload.wikimedia.org/wikipedia/commons/7/7a/Alarm_Clock_GIF_Animation_High_Res.gif")
                     bumping = False
     await client.process_commands(message)
 
