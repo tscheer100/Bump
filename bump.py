@@ -86,6 +86,7 @@ async def on_message(message):
                     )
                     embed_bump.set_footer(url = "https://upload.wikimedia.org/wikipedia/commons/7/7a/Alarm_Clock_GIF_Animation_High_Res.gif")
                     bumping = False
+                    await ch.send(embed = embed_bump)
     await client.process_commands(message)
 
 client.run(DISCORD_TOKEN)
