@@ -82,9 +82,9 @@ async def on_message(message):
                     embed_bump = discord.Embed(
                         title = "Time to bump!",
                         color = discord.Colour.purple(),
-                        description = "time to bump! Type `!d bump` to bump the server again",
+                        description = "Type `!d bump` to bump the server again",
                     )
-                    embed_bump.set_footer(url = "https://upload.wikimedia.org/wikipedia/commons/7/7a/Alarm_Clock_GIF_Animation_High_Res.gif")
+                    embed_bump.set_thumbnail(url = "https://upload.wikimedia.org/wikipedia/commons/7/7a/Alarm_Clock_GIF_Animation_High_Res.gif")
                     bumping = False
                     await ch.send(embed = embed_bump)
     await client.process_commands(message)
