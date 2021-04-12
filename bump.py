@@ -8,12 +8,12 @@ from dotenv import load_dotenv
 import time
 
 # uncomment the line below if you're trying to edit code in VSCode
-os.chdir('./Bump')
+# os.chdir('./Bump')
 load_dotenv('./.env')
 DISCORD_TOKEN = os.getenv('DISCORD_TOKEN')
 
 intents = discord.Intents(members = True, messages = True, guilds = True)
-client = commands.Bot(intents = intents, command_prefix = ".", status=discord.Status.online, activity=discord.Game("under construction"), help_command = None)
+client = commands.Bot(intents = intents, command_prefix = ".", status=discord.Status.online, activity=discord.Game(".help"), help_command = None)
 bumping = False
 lock = asyncio.Lock()
 
