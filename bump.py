@@ -13,7 +13,7 @@ load_dotenv('./.env')
 DISCORD_TOKEN = os.getenv('DISCORD_TOKEN')
 
 intents = discord.Intents(members = True, messages = True, guilds = True)
-client = commands.Bot(intents = intents, command_prefix = ".", status=discord.Status.online, activity=discord.Game("under construction") )
+client = commands.Bot(intents = intents, command_prefix = ".", status=discord.Status.online, activity=discord.Game("under construction"), help_command = None)
 bumping = False
 lock = asyncio.Lock()
 
@@ -29,9 +29,23 @@ async def github(ctx):
     )
     embed.set_thumbnail(url = "https://www.sferalabs.cc/wp-content/uploads/github-logo-white.png")
     embed.add_field(name = "Bump bot code", value = "https://github.com/tscheer100/Bump", inline = False)
-    embed.add_field(name = "Developers Github", value = "https://github.com/tscheer100")
+    embed.add_field(name = "Developers Github", value = "https://github.com/tscheer100", inline = False)
     embed.add_field(name = "Support more free bots by paying for the developer's coffee :woozy_face::coffee:", value = "https://www.paypal.com/paypalme/TheTurtleKing", inline = False)
-    await ctx.send(embed = embed)    
+    await ctx.send(embed = embed)  
+
+@client.command(aliases = ['h'])
+async def help(ctx):  
+    embed = discord.Embed(
+        title = "Help menu",
+        color = discord.Colour.purple()
+    )
+    embed.add_field(name = "Instructions", value = """For this bot to activate, it must detect an *embed*.
+    to call an embed, just call on Disboard with `!d bump`
+    """)
+    embed.add_field(name = ".git", value = "Get this bot's code", inline = False)
+    embed.add_field(name = ".discord", value = "Join the developer's discord sever", inline = False)
+    embed.add_field(name = "Support more free bots by paying for the developer's coffee :woozy_face::coffee:", value = "https://www.paypal.com/paypalme/TheTurtleKing", inline = False)
+    await ctx.send(embed = embed)
 
 @client.command(aliases = ['discord', 'Discord'])
 async def server(ctx):
