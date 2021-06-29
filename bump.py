@@ -3,7 +3,9 @@ import os
 import time
 import asyncio
 import discord
+from discord import errors
 from discord.ext import commands
+from discord.ext.commands import CommandNotFound
 from dotenv import load_dotenv
 import time
 
@@ -16,6 +18,12 @@ intents = discord.Intents(members = True, messages = True, guilds = True)
 client = commands.Bot(intents = intents, command_prefix = ".", status=discord.Status.online, activity=discord.Game(".help"), help_command = None)
 bumping = False
 lock = asyncio.Lock()
+
+@client.event
+async def on_command_error(ctx, error):
+    if isinstance(error, CommandNotFound):
+        return
+    raise error
 
 @client.event
 async def on_ready():
@@ -46,6 +54,7 @@ async def help(ctx):
     embed.add_field(name = ".discord", value = "Join the developer's discord sever", inline = False)
     embed.add_field(name = "Support more free bots by paying for the developer's coffee :woozy_face::coffee:", value = "https://www.paypal.com/paypalme/TheTurtleKing", inline = False)
     await ctx.send(embed = embed)
+  
 
 @client.command(aliases = ['discord', 'Discord'])
 async def server(ctx):
@@ -56,6 +65,7 @@ async def server(ctx):
     embed.set_thumbnail(url = "https://cdn.discordapp.com/attachments/767175117901266974/767250128045473802/duskiconmixedreborn.gif")
     embed.set_footer(icon_url = ctx.author.avatar_url, text = f"requested by {ctx.author.name}")
     await ctx.send(embed = embed)
+
 
 @client.event
 async def on_message(message):
@@ -108,6 +118,9 @@ async def on_message(message):
                     embed_bump.set_thumbnail(url = "https://upload.wikimedia.org/wikipedia/commons/7/7a/Alarm_Clock_GIF_Animation_High_Res.gif")
                     bumping = False
                     await ch.send(embed = embed_bump)
+
     await client.process_commands(message)
+
+
 
 client.run(DISCORD_TOKEN)
